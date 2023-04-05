@@ -1,0 +1,55 @@
+version: "3.0"
+services:
+  gateway:
+    image: nodered/node-red:2.2.2
+    ports:
+      - "1890:1880"
+    links:
+      - redis-server
+    volumes:
+      - ./data-gw:/data
+  nodo1:
+    image: nodered/node-red:2.2.2
+    ports:
+      - "1891:1880"
+    links:
+      - redis-server
+    volumes:
+      - ./data:/data 
+  nodo2:
+    image: nodered/node-red:2.2.2
+    ports:
+      - "1892:1880"
+    links:
+      - redis-server
+    volumes:
+      - ./data:/data
+  nodo3:
+    image: nodered/node-red:2.2.2
+    ports:
+      - "1893:1880"
+    links:
+      - redis-server
+    volumes:
+      - ./data:/data  
+
+  redis-server:
+    image: molineta/redis
+    ports:
+        - "6379:6379"
+        - "9121:9121"
+  
+  influxdb:
+    image: influxdb
+    ports:
+      - "8086:8086"
+  
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "8000:3000"
+
+networks:
+    noderednet:
+        driver: bridge
+          

@@ -1,0 +1,22 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && \
+    apt-get install -y redis-server nano wget tar curl
+
+#COPY redis_exporter.service /etc/systemd/system/redis_exporter.service
+#COPY  /init.d/redis_exporter /etc/init.d/redis_exporter
+
+RUN sed -i 's/supervised no/supervised systemd/g' /etc/redis/redis.conf  && \
+	sed -i 's/protected-mode yes/protected-mode no/g' /etc/redis/redis.conf  && \
+    sed -i "s/bind .*/#bind 127.0.0.1/g" /etc/redis/redis.conf && \
+    groupadd --system prometheus && useradd -s /sbin/nologin --system -g prometheus prometheus
+#	/etc/init.d/redis-server start
+
+RUN wget https://github.com/oliver006/redis_exporter/releases/download/v1.17.0/redis_exporter-v1.17.0.linux-amd64.tar.gz && \
+    tar xvf redis_exporter-v1.17.0.linux-amd64.tar.gz -C /home && \
+    mv /home/redis_exporter-v1.17.0.linux-amd64/redis_exporter /usr/local/bin/ && \
+    rm -rf /home/*.*
+
+EXPOSE 6379 9121
+
+CMD service redis-server start && redis-server --version && redis_exporter && tail -f /var/log/redis/redis-server.log

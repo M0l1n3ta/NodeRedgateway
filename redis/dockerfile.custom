@@ -1,0 +1,19 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && \
+    apt-get install -y redis-server nano 
+
+RUN sed -i 's/supervised no/supervised systemd/g' /etc/redis/redis.conf  && \
+	sed -i 's/protected-mode yes/protected-mode no/g' /etc/redis/redis.conf  && \
+    sed -i 's/bind .*/#bind 127.0.0.1/g' /etc/redis/redis.conf && \
+    sed -i '0,/# loadmodule .*/ s//loadmodule \/etc\/redis\/modules\/rejson.so/g' /etc/redis/redis.conf && \
+    mkdir /etc/redis/modules
+    
+#	/etc/init.d/redis-server start
+ADD modules /etc/redis/modules
+
+RUN sed -i 's/supervised no/supervised systemd/g' /etc/redis/redis.conf 
+
+EXPOSE 6379
+
+CMD service redis-server start && redis-server --version && tail -f /var/log/redis/redis-server.log

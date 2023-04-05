@@ -1,0 +1,16 @@
+[Unit]
+Description=Redis Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/usr/bin/redis_exporter \
+    -web.listen-address ":9121" \
+    -redis.addr "redis://localhost:6379" \
+    -redis.password "your-strong-redis-password"
+
+[Install]
+WantedBy=multi-user.target
