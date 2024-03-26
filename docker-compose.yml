@@ -1,7 +1,7 @@
 version: "3.0"
 services:
   gateway:
-    image: nodered/node-red:2.2.2
+    image: nodered/node-red:3.1.7
     ports:
       - "1890:1880"
     links:
@@ -9,7 +9,7 @@ services:
     volumes:
       - ./data-gw:/data
   nodo1:
-    image: nodered/node-red:2.2.2
+    image: nodered/node-red:3.1.7
     ports:
       - "1891:1880"
     links:
@@ -17,7 +17,7 @@ services:
     volumes:
       - ./data:/data 
   nodo2:
-    image: nodered/node-red:2.2.2
+    image: nodered/node-red:3.1.7
     ports:
       - "1892:1880"
     links:
@@ -25,7 +25,7 @@ services:
     volumes:
       - ./data:/data
   nodo3:
-    image: nodered/node-red:2.2.2
+    image: nodered/node-red:3.1.7
     ports:
       - "1893:1880"
     links:
